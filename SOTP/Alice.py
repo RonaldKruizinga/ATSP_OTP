@@ -7,7 +7,7 @@ def encode(key, clear):
         key_c = key[i % len(key)]
         enc_c = chr((ord(clear[i]) + ord(key_c)) % 256)
         enc.append(enc_c)
-    return base64.decode()
+    return base64.urlsafe_b64encode("".join(enc).encode()).decode()
 
 
 class Alice:

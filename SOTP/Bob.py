@@ -1,5 +1,6 @@
 import base64
-from random import randint
+
+from utility import get_random_bit
 
 
 def decode(key, enc):
@@ -18,7 +19,7 @@ class Bob:
         self.generator = generator
         self.secret_bob = secret_bob
         self.modulus = modulus
-        self.choice = randint(0, 1)  # choose between two values
+        self.choice = get_random_bit()  # choose between two values
 
     def receive_secret_a(self, secret_a, alice):
         if self.choice == 0:
