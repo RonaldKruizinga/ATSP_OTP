@@ -1,11 +1,14 @@
 from pinkas_ot.chooser import Chooser
 from pinkas_ot.sender import Sender
-from utility import get_random_number, get_random_bit
+from utility import get_random_prime, primitive_root
 
 
 def run_pinkas():
-    g = 9
-    p = 13
+    p = get_random_prime()
+    g = primitive_root(p)
+    #p = 397
+    #g = 5
+    print(p, g)
     sender = Sender(g, p)
     chooser = Chooser(g, p)
 

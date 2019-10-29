@@ -42,3 +42,5 @@ def primitive_root(modulo):
         actual_set = set(pow(g, powers) % modulo for powers in range(1, modulo))
         if required_set == actual_set:
             return g
+
+

@@ -12,11 +12,11 @@ class Chooser:
     def __init__(self, g, p):
         self.g = g
         self.p = p
+        self.a = get_random_number()
+        self.b = get_random_number()
 
     def generate_labels(self):
-        self.a = 5
-        self.b = 7
-        self.g = 9
+
         ga = (self.g ** self.a) % self.p
         gb = (self.g ** self.b) % self.p
         x = ga
