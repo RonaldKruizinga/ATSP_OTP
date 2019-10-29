@@ -1,8 +1,9 @@
 import base64
 
-from utility import get_random_bit
+from utility import get_random_bit, get_random_number
 
 
+# Temporary decoding function
 def decode(key, enc):
     dec = []
     enc = base64.urlsafe_b64decode(enc).decode()
@@ -14,21 +15,34 @@ def decode(key, enc):
 
 
 class Bob:
-    def __init__(self, generator, modulus, secret_bob):
+    def __init__(self, generator, modulus):
         self.decryption_key = ""
         self.generator = generator
-        self.secret_bob = secret_bob
+
+        # Between 1 and 100 for performance
+        self.secret_bob = get_random_number()
         self.modulus = modulus
+
         self.choice = get_random_bit()  # choose between two values
+
+        print(f"Bob secret: {self.secret_bob}, choice: {self.choice}")
 
     def receive_secret_a(self, secret_a, alice):
         if self.choice == 0:
+            # g^b % p
             secret_b = (self.generator ** self.secret_bob) % self.modulus
         else:
+            # A * g^b % p
             secret_b = secret_a * ((self.generator ** self.secret_bob) % self.modulus)
+
+        print(f"Bob encoded secret B: {secret_b}")
+
+        # A^b % p
         self.decryption_key = str((secret_a ** self.secret_bob) % self.modulus)
+        print(f"Bob decryption key: {self.decryption_key}")
+
         alice.receive_secret_b(secret_b, self)
 
     def receive_labels(self, encrypted_labels):
         label = decode(self.decryption_key, encrypted_labels[self.choice])
-        print(label)
+        print(f"Bob result: {label}")
