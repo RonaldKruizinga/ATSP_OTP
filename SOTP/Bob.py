@@ -1,9 +1,12 @@
 import base64
+import hashlib
 
 from utility import get_random_bit, get_random_number
 
 
-# Temporary decoding function
+# Temporary encryption function
+# In a real life scenario, this should never be used, but to demonstrate the principle of the OTP algorithm
+# it will suffice. Real life scenarios should consider algorithms like AES
 def decode(key, enc):
     dec = []
     enc = base64.urlsafe_b64decode(enc).decode()
@@ -19,7 +22,7 @@ class Bob:
         self.decryption_key = ""
         self.generator = generator
 
-        # Between 1 and 100 for performance
+        # Between 1 and 10000
         self.secret_bob = get_random_number()
         self.modulus = modulus
 
@@ -38,7 +41,9 @@ class Bob:
         print(f"Bob encoded secret B: {secret_b}")
 
         # A^b % p
-        self.decryption_key = str((secret_a ** self.secret_bob) % self.modulus)
+        decode_key = str((secret_a ** self.secret_bob) % self.modulus)
+
+        self.decryption_key = hashlib.sha1(decode_key.encode('utf-8')).hexdigest()
         print(f"Bob decryption key: {self.decryption_key}")
 
         alice.receive_secret_b(secret_b, self)

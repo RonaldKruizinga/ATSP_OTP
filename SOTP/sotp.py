@@ -17,8 +17,6 @@ def sotp():
 
     # Start protocol
     alice.send_secret(bob)
-    # todo: hash with SHA1
-    # todo: implement actual encryption
     # todo: 1 to n ?
 
 

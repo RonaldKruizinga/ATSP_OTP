@@ -3,7 +3,7 @@ from random import getrandbits
 
 
 def get_random_number():
-    return randint(1, 100)
+    return randint(1, 10000)
 
 
 def get_random_bit():
