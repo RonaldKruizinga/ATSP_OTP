@@ -16,8 +16,8 @@ def encode(key, clear):
 
 
 class Alice:
-    # Simple labels for easy understanding. Should be longer and random string in a real application.
-    messages = ["label0", "label1"]
+    # Simple labels for easy understanding. Should be longer and random string in a real application. Hardcoded as proof of concept
+    messages = ["label0", "label1", "label2", "label3", "label4", "label5", "label6", "label7", "label8", "label9"]
 
     def __init__(self, generator, modulus):
         self.generator = generator
@@ -34,20 +34,9 @@ class Alice:
         bob.receive_secret_a(self.encoded_secret, self)
 
     def receive_secret_b(self, secret_b, bob):
-        # k_0 = B^a % p
-        key_0 = str((secret_b ** self.secret_alice) % self.modulus)
-        hashed_key_0 = hashlib.sha1(key_0.encode('utf-8')).hexdigest()
+        keys_and_labels = [(str((int(secret_b / (self.encoded_secret * c)) ** self.secret_alice) % self.modulus), self.messages[c]) for c in range(1, 10)]
+        keys_and_labels.insert(0, (str((secret_b ** self.secret_alice) % self.modulus), self.messages[0])) # Special case for label 0 as the list comprehension above would divide by zero when we use it
+        encoded_messages = [encode(hashlib.sha1(key.encode('utf-8')).hexdigest(), label) for key, label in keys_and_labels]
+        print(f"Alice encrypted: {encoded_messages}")
 
-        # k_1 = (B/A)^a % p
-        key_1 = str((int(secret_b / self.encoded_secret) ** self.secret_alice) % self.modulus)
-        hashed_key_1 = hashlib.sha1(key_1.encode('utf-8')).hexdigest()
-
-        print(f"Alice keys: {hashed_key_0}, {hashed_key_1}")
-
-        encrypted_0 = encode(hashed_key_0, self.messages[0])
-        encrypted_1 = encode(hashed_key_1, self.messages[1])
-
-        print(f"Alice encrypted: {encrypted_0}, {encrypted_1}")
-
-        bob.receive_labels([encrypted_0, encrypted_1])
-
+        bob.receive_labels(encoded_messages)

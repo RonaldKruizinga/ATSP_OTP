@@ -26,7 +26,7 @@ class Bob:
         self.secret_bob = get_random_number_with_max(modulus)
         self.modulus = modulus
 
-        self.choice = get_random_bit()  # choose between two values
+        self.choice = get_random_number_with_max(10)  # choose between 10 values (hardcoded as proof of concept)
 
         print(f"Bob secret: {self.secret_bob}, choice: {self.choice}")
 
@@ -35,9 +35,8 @@ class Bob:
             # g^b % p
             secret_b = (self.generator ** self.secret_bob) % self.modulus
         else:
-            # A * g^b % p
-            secret_b = secret_a * ((self.generator ** self.secret_bob) % self.modulus)
-
+            # c*A * g^b % p
+            secret_b = self.choice * secret_a * ((self.generator ** self.secret_bob) % self.modulus)
         print(f"Bob encoded secret B: {secret_b}")
 
         # A^b % p
