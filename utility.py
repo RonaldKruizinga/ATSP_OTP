@@ -7,7 +7,7 @@ def get_random_number():
 
 
 def get_random_number_with_max(maximum):
-    return randint(0, maximum)
+    return randint(0, maximum-1)
 
 
 def get_random_bit():
