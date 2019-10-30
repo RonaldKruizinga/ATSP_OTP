@@ -6,6 +6,10 @@ def get_random_number():
     return randint(1, 10000)
 
 
+def get_random_number_with_max(maximum):
+    return randint(0, maximum)
+
+
 def get_random_bit():
     return randint(0, 1)
 

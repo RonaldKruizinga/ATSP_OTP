@@ -22,7 +22,7 @@ class Bob:
         self.decryption_key = ""
         self.generator = generator
 
-        # In Zp
+        # In Zn
         self.secret_bob = get_random_number_with_max(modulus)
         self.modulus = modulus
 

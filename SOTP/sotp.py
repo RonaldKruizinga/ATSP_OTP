@@ -3,7 +3,7 @@ from SOTP.Bob import Bob
 from utility import get_random_prime, primitive_root
 
 
-# Start the simplest oblivious transfer protocol
+# Start the simplest oblivious transfer protocol as a 1-2 protocol based on Diffie-Hellman
 def sotp():
     # Initialise protocol
 
@@ -17,7 +17,6 @@ def sotp():
 
     # Start protocol
     alice.send_secret(bob)
-    # todo: 1 to n ?
 
 
 sotp()
