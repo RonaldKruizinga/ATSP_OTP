@@ -22,7 +22,7 @@ class Alice:
     def __init__(self, generator, modulus):
         self.generator = generator
 
-        # in Zp
+        # In Zp
         self.secret_alice = get_random_number_with_max(modulus)
         self.modulus = modulus
 
