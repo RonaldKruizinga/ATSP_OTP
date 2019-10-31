@@ -38,7 +38,8 @@ class Bob:
             secret_b = pow(self.generator, self.secret_bob, self.modulus)
         else:
             # c*A * g^b % p
-            secret_b = self.choice * secret_a * (pow(self.generator, self.secret_bob, self.modulus))
+            #secret_b = self.choice * secret_a * (pow(self.generator, self.secret_bob, self.modulus))
+            secret_b = (self.choice * secret_a * (self.generator ** self.secret_bob)) % self.modulus
         if DEBUG:
             print(f"Bob encoded secret B: {secret_b}")
 

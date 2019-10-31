@@ -1,3 +1,4 @@
+import math
 from random import randint
 from random import getrandbits
 
@@ -7,7 +8,7 @@ def get_random_number():
 
 
 def get_random_number_with_max(maximum):
-    return randint(0, maximum-1)
+    return randint(0, maximum - 1)
 
 
 def get_random_bit():
@@ -48,3 +49,25 @@ def primitive_root(modulo):
             return g
 
 
+# Function to find modulo inverse of b. It returns
+# -1 when inverse doesn't
+# modInverse works for prime m
+def mod_inverse(b, m):
+    g = math.gcd(b, m)
+    if (g != 1):
+        print("Inverse doesn't exist")
+        return -1
+    else:
+        # If b and m are relatively prime,
+        # then modulo inverse is b^(m-2) mode m
+        return pow(b, m - 2, m)
+
+
+# Function to compute a/b under modulo m
+def mod_divide(a, b, m):
+    a = a % m
+    inv = mod_inverse(b, m)
+    if (inv == -1):
+        print("Division not defined")
+    else:
+        return (inv * a) % m

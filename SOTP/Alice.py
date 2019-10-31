@@ -2,7 +2,7 @@ import base64
 import hashlib
 
 from constants import MESSAGE_COUNT, DEBUG
-from utility import get_random_number_with_max
+from utility import get_random_number_with_max, mod_divide
 
 
 # Temporary encryption function
@@ -42,15 +42,14 @@ class Alice:
 
     def receive_secret_b(self, secret_b, bob):
         # B / A*c ^ a % p
-        keys_and_labels = [
-            (str(pow(int(secret_b / (self.encoded_secret * c)), self.secret_alice, self.modulus)), self.messages[c]) for
-            c in range(1, MESSAGE_COUNT)]
+        keys_and_labels = [(str(pow(mod_divide(secret_b, (self.encoded_secret * c), self.modulus), self.secret_alice, self.modulus)), self.messages[c]) for c in range(1, MESSAGE_COUNT)]
+
         # B ^ a % p
-        keys_and_labels.insert(0, (str(pow(secret_b, self.secret_alice, self.modulus)), self.messages[
-            0]))  # Special case for label 0 as the list comprehension above would divide by zero when we use it
-        encoded_messages = [encode(hashlib.sha1(key.encode('utf-8')).hexdigest(), label) for key, label in
-                            keys_and_labels]
+        keys_and_labels.insert(0, (str(pow(secret_b, self.secret_alice, self.modulus)), self.messages[0]))  # Special case for label 0 as the list comprehension above would divide by zero when we use it
+        encoded_messages = [encode(hashlib.sha1(key.encode('utf-8')).hexdigest(), label) for key, label in keys_and_labels]
         if DEBUG:
             print(f"Alice encrypted: {encoded_messages}")
 
         bob.receive_labels(encoded_messages)
+
+
