@@ -3,15 +3,15 @@ from utility import get_random_number
 
 
 class Sender:
-    g = 0
-    m = []
-    p = 0
+    g = 0  # Group generator
+    m = []  # Messages that chooser is interested in
+    p = 0  # Size of group (prime)
 
     def __init__(self, g, p):
         self.m = [0] * 100
         self.g = g
         self.p = p
-        for i in range(0, 99):
+        for i in range(0, 2):  # We only offer a binary choice in messages here.
             self.m[i] = get_random_number()
 
         print("m[0]:" + str(self.m[0]))
@@ -24,7 +24,7 @@ class Sender:
         z1 = label_message.z1
 
         if z0 == z1:
-            print("no thx")
+            print("z0 == z1. OT compromised.")
 
         r0 = get_random_number()
         s0 = get_random_number()

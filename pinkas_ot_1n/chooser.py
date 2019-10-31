@@ -19,8 +19,8 @@ class Chooser:
 
     def generate_labels(self):
 
-        ga = (self.g ** self.a) % self.p
-        gb = (self.g ** self.b) % self.p
+        ga = pow(self.g, self.a, self.p)
+        gb = pow(self.g, self.b, self.p)
         x = ga
         y = gb
         # Randomly choose which message we are interested in
@@ -31,25 +31,26 @@ class Chooser:
         z = [0] * MESSAGE_COUNT
         c_sigma = self.a * self.b
         # z_sigma is calculated normally, based on c_sigma and thus on a and b.
-        z[self.sigma] = (self.g ** c_sigma) % self.p
+        z[self.sigma] = pow(self.g, c_sigma, self.p)
         # z_0 is a special case: TODO why? gives away sigma?
-        z[0] = (self.g ** self.get_cycle_index(c_sigma - self.sigma)) % self.p
-        # the other z's are random members of G
+        z[0] = pow(self.g, self.get_cycle_index(c_sigma - self.sigma), self.p)
+        # The other z's are random members of G
         for j in range(1, MESSAGE_COUNT):
             if j == self.sigma:
                 # Already calculated; skip
                 pass
             else:
                 z[j] = (z[self.sigma] * (self.g ** self.get_cycle_index(j - self.sigma))) % self.p
-        print(z)
+
         return Message(x=x, y=y, z=z)
 
     def decrypt_message(self, message):
         # w[sigma] is actually g^(s*a+r)
-        # the used encryption key is g^(s*a*b+r*b) thus we need to raise w to the power b
+        # The used encryption key is g^(s*a*b+r*b) thus we need to raise w to the power b
         # After this, decrypt using XOR to find results
-        return ((message.w[self.sigma] ** self.b) % self.p) ^ message.encrypted_message[self.sigma]
+        return pow(message.w[self.sigma], self.b, self.p) ^ message.encrypted_message[self.sigma]
 
+    # Map negative indices "-i" in the group to "p-1-i"
     def get_cycle_index(self, i):
         if i > 0:
             return i

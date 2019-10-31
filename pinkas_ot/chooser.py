@@ -24,15 +24,15 @@ class Chooser:
         y = gb
         # Randomly choose if want the label for 0 or 1
         self.sigma = get_random_bit()
-        print("sigma:" + str(self.sigma))
+        print(f"sigma:{self.sigma}")
         # The c of sigma is build using a and b. The other is random.
         c = [0, 0]
         c[self.sigma] = self.a * self.b
         c[1 - self.sigma] = get_random_number()
-        z0 = (self.g ** c[0]) % self.p
-        z1 = (self.g ** c[1]) % self.p
+        z0 = pow(self.g, c[0], self.p)
+        z1 = pow(self.g, c[1], self.p)
         return Message(x=x, y=y, z0=z0, z1=z1)
 
     def decrypt_message(self, message):
         # Decrypt using XOR to find results
-        return ((message.w[self.sigma] ** self.b) % self.p) ^ message.encrypted_message[self.sigma]
+        return pow(message.w[self.sigma], self.b, self.p) ^ message.encrypted_message[self.sigma]
