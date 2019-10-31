@@ -1,5 +1,5 @@
 from pinkas_ot_1n.message import Message
-from pinkas_ot_1n.constants import MESSAGE_COUNT
+from constants import MESSAGE_COUNT, DEBUG
 from utility import get_random_number_with_max
 
 
@@ -15,8 +15,8 @@ class Sender:
             Sender.m = [0] * MESSAGE_COUNT
             for i in range(0, MESSAGE_COUNT):
                 Sender.m[i] = get_random_number_with_max(self.p)  # Randomly initiate messages
-
-        print(f"messages: {Sender.m}")
+        if DEBUG:
+            print(f"messages: {Sender.m}")
 
     def generate_encrypted_messages(self, label_message):
         x = label_message.x

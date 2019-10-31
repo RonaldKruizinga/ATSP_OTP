@@ -1,5 +1,7 @@
 import base64
 import hashlib
+
+from constants import MESSAGE_COUNT, DEBUG
 from utility import get_random_number_with_max
 
 
@@ -17,28 +19,38 @@ def encode(key, clear):
 
 class Alice:
     # Simple labels for easy understanding. Should be longer and random string in a real application. Hardcoded as proof of concept
-    messages = ["label0", "label1", "label2", "label3", "label4", "label5", "label6", "label7", "label8", "label9"]
+    messages = []  # ["label0", "label1", "label2", "label3", "label4", "label5", "label6", "label7", "label8", "label9"]
 
     def __init__(self, generator, modulus):
         self.generator = generator
-
+        # init messages if needed
+        if not Alice.messages:
+            Alice.messages = [""] * MESSAGE_COUNT
+            for i in range(0, MESSAGE_COUNT):
+                Alice.messages[i] = f"label{i}"
         # in Zp
         self.secret_alice = get_random_number_with_max(modulus)
         self.modulus = modulus
 
         # g^a % p = A
         self.encoded_secret = pow(self.generator, self.secret_alice, self.modulus)
-        print(f"Alice secret: {self.secret_alice}, encoded: {self.encoded_secret}")
+        if DEBUG:
+            print(f"Alice secret: {self.secret_alice}, encoded: {self.encoded_secret}")
 
     def send_secret(self, bob):
         bob.receive_secret_a(self.encoded_secret, self)
 
     def receive_secret_b(self, secret_b, bob):
         # B / A*c ^ a % p
-        keys_and_labels = [(str(pow(int(secret_b / (self.encoded_secret * c)), self.secret_alice, self.modulus)), self.messages[c]) for c in range(1, 10)]
+        keys_and_labels = [
+            (str(pow(int(secret_b / (self.encoded_secret * c)), self.secret_alice, self.modulus)), self.messages[c]) for
+            c in range(1, MESSAGE_COUNT)]
         # B ^ a % p
-        keys_and_labels.insert(0, (str(pow(secret_b, self.secret_alice, self.modulus)), self.messages[0])) # Special case for label 0 as the list comprehension above would divide by zero when we use it
-        encoded_messages = [encode(hashlib.sha1(key.encode('utf-8')).hexdigest(), label) for key, label in keys_and_labels]
-        print(f"Alice encrypted: {encoded_messages}")
+        keys_and_labels.insert(0, (str(pow(secret_b, self.secret_alice, self.modulus)), self.messages[
+            0]))  # Special case for label 0 as the list comprehension above would divide by zero when we use it
+        encoded_messages = [encode(hashlib.sha1(key.encode('utf-8')).hexdigest(), label) for key, label in
+                            keys_and_labels]
+        if DEBUG:
+            print(f"Alice encrypted: {encoded_messages}")
 
         bob.receive_labels(encoded_messages)

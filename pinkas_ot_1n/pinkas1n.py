@@ -1,19 +1,20 @@
 from pinkas_ot_1n.chooser import Chooser
-from pinkas_ot_1n.constants import MESSAGE_COUNT
+from constants import MESSAGE_COUNT, DEBUG
 from pinkas_ot_1n.sender import Sender
 from utility import get_random_prime, primitive_root
 
 
-def pinkas_1n():
-    p = 0
+def pinkas_1n(p=None, g=None):
     # p should be greater than message count, to account for calculations of g ** message_index
     # as p is the size of group G
-    while p <= MESSAGE_COUNT:
-        p = get_random_prime()
+    if not p:
+        while p <= MESSAGE_COUNT:
+            p = get_random_prime()
     # generator of cyclic group G of size p
-    g = primitive_root(p)
-
-    print(f"p:{p}, g:{g}")
+    if not g:
+        g = primitive_root(p)
+    if DEBUG:
+        print(f"p:{p}, g:{g}")
     sender = Sender(g, p)
     chooser = Chooser(g, p)
 

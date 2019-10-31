@@ -1,5 +1,5 @@
 from pinkas_ot_1n.message import Message
-from pinkas_ot_1n.constants import MESSAGE_COUNT
+from constants import MESSAGE_COUNT, DEBUG
 from utility import get_random_number_with_max
 
 
@@ -25,7 +25,8 @@ class Chooser:
         y = gb
         # Randomly choose which message we are interested in
         self.sigma = get_random_number_with_max(MESSAGE_COUNT-1)
-        print(f"sigma:{self.sigma}")
+        if DEBUG:
+            print(f"sigma:{self.sigma}")
         # The c of sigma is build using a and b. The others are random members of G
 
         z = [0] * MESSAGE_COUNT
