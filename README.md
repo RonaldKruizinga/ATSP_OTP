@@ -11,3 +11,5 @@ These can be found in the three folders in the repo.
 Finally, our testing suite can be found in the Testing folder.
 
 An algorithm can be run by simply running the run_sotp or run_pinkas files (with the right dependencies installed)
+
+All are made in Python3
