@@ -4,18 +4,19 @@ from utility import get_random_number_with_max
 
 
 class Sender:
-    g = 0  # Group generator
     m = []  # Messages that chooser is interested in
-    p = 0  # Size of group (prime)
 
     def __init__(self, g, p):
-        self.m = [0] * MESSAGE_COUNT
-        self.g = g
-        self.p = p
-        for i in range(0, MESSAGE_COUNT):
-            self.m[i] = get_random_number_with_max(self.p)  # Randomly initiate messages
 
-        print(f"messages: {self.m}")
+        self.g = g  # Group generator
+        self.p = p  # Size of group (prime)
+        # Init messages if first call
+        if not Sender.m:
+            Sender.m = [0] * MESSAGE_COUNT
+            for i in range(0, MESSAGE_COUNT):
+                Sender.m[i] = get_random_number_with_max(self.p)  # Randomly initiate messages
+
+        print(f"messages: {Sender.m}")
 
     def generate_encrypted_messages(self, label_message):
         x = label_message.x
@@ -31,6 +32,6 @@ class Sender:
             # know which one
             w[i] = (x ** s * self.g ** r) % self.p
             m_encryption_key = (z[i] ** s * y ** r) % self.p
-            encrypted_m[i] = self.m[i] ^ m_encryption_key
+            encrypted_m[i] = Sender.m[i] ^ m_encryption_key
 
         return Message(encrypted_message=encrypted_m, w=w)

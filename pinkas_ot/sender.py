@@ -3,19 +3,19 @@ from utility import get_random_number
 
 
 class Sender:
-    g = 0  # Group generator
     m = []  # Messages that chooser is interested in
-    p = 0  # Size of group (prime)
 
     def __init__(self, g, p):
-        self.m = [0] * 100
-        self.g = g
-        self.p = p
-        for i in range(0, 2):  # We only offer a binary choice in messages here.
-            self.m[i] = get_random_number()
 
-        print("m[0]:" + str(self.m[0]))
-        print("m[1]:" + str(self.m[1]))
+        self.g = g  # Group generator
+        self.p = p  # Size of group (prime)
+        if not Sender.m:
+            Sender.m = [0] * 2
+            for i in range(0, 2):  # We only offer a binary choice in messages here.
+                Sender.m[i] = get_random_number()
+
+        print("m[0]:" + str(Sender.m[0]))
+        print("m[1]:" + str(Sender.m[1]))
 
     def generate_encrypted_messages(self, label_message):
         x = label_message.x
@@ -34,10 +34,10 @@ class Sender:
         encrypted_m = [0, 0]
         w[0] = (x ** s0 * self.g ** r0) % self.p
         m0_encryption_key = (z0 ** s0 * y ** r0) % self.p
-        encrypted_m[0] = self.m[0] ^ m0_encryption_key
+        encrypted_m[0] = Sender.m[0] ^ m0_encryption_key
 
         w[1] = (x ** s1 * self.g ** r1) % self.p
         m1_encryption_key = (z1 ** s1 * y ** r1) % self.p
-        encrypted_m[1] = self.m[1] ^ m1_encryption_key
+        encrypted_m[1] = Sender.m[1] ^ m1_encryption_key
 
         return Message(encrypted_message=encrypted_m, w=w)

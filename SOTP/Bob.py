@@ -1,7 +1,7 @@
 import base64
 import hashlib
 
-from utility import get_random_bit, get_random_number_with_max
+from utility import get_random_number_with_max
 
 
 # Temporary encryption function

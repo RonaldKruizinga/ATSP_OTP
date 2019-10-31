@@ -32,10 +32,9 @@ class Chooser:
         c_sigma = self.a * self.b
         # z_sigma is calculated normally, based on c_sigma and thus on a and b.
         z[self.sigma] = pow(self.g, c_sigma, self.p)
-        # z_0 is a special case: TODO why? gives away sigma?
-        z[0] = pow(self.g, self.get_cycle_index(c_sigma - self.sigma), self.p)
+
         # The other z's are random members of G
-        for j in range(1, MESSAGE_COUNT):
+        for j in range(0, MESSAGE_COUNT):
             if j == self.sigma:
                 # Already calculated; skip
                 pass

@@ -18,5 +18,3 @@ def sotp():
     # Start protocol
     alice.send_secret(bob)
 
-
-sotp()
