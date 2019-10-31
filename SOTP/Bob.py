@@ -33,14 +33,14 @@ class Bob:
     def receive_secret_a(self, secret_a, alice):
         if self.choice == 0:
             # g^b % p
-            secret_b = (self.generator ** self.secret_bob) % self.modulus
+            secret_b = pow(self.generator, self.secret_bob, self.modulus)
         else:
             # c*A * g^b % p
-            secret_b = self.choice * secret_a * ((self.generator ** self.secret_bob) % self.modulus)
+            secret_b = self.choice * secret_a * (pow(self.generator, self.secret_bob, self.modulus))
         print(f"Bob encoded secret B: {secret_b}")
 
         # A^b % p
-        decode_key = str((secret_a ** self.secret_bob) % self.modulus)
+        decode_key = str(pow(secret_a, self.secret_bob, self.modulus))
 
         self.decryption_key = hashlib.sha1(decode_key.encode('utf-8')).hexdigest()
         print(f"Bob decryption key: {self.decryption_key}")

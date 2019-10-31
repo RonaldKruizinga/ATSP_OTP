@@ -27,15 +27,17 @@ class Alice:
         self.modulus = modulus
 
         # g^a % p = A
-        self.encoded_secret = (self.generator ** self.secret_alice) % self.modulus
+        self.encoded_secret = pow(self.generator, self.secret_alice, self.modulus)
         print(f"Alice secret: {self.secret_alice}, encoded: {self.encoded_secret}")
 
     def send_secret(self, bob):
         bob.receive_secret_a(self.encoded_secret, self)
 
     def receive_secret_b(self, secret_b, bob):
-        keys_and_labels = [(str((int(secret_b / (self.encoded_secret * c)) ** self.secret_alice) % self.modulus), self.messages[c]) for c in range(1, 10)]
-        keys_and_labels.insert(0, (str((secret_b ** self.secret_alice) % self.modulus), self.messages[0])) # Special case for label 0 as the list comprehension above would divide by zero when we use it
+        # B / A*c ^ a % p
+        keys_and_labels = [(str(pow(int(secret_b / (self.encoded_secret * c)), self.secret_alice, self.modulus)), self.messages[c]) for c in range(1, 10)]
+        # B ^ a % p
+        keys_and_labels.insert(0, (str(pow(secret_b, self.secret_alice, self.modulus)), self.messages[0])) # Special case for label 0 as the list comprehension above would divide by zero when we use it
         encoded_messages = [encode(hashlib.sha1(key.encode('utf-8')).hexdigest(), label) for key, label in keys_and_labels]
         print(f"Alice encrypted: {encoded_messages}")
 
