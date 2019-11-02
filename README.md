@@ -13,3 +13,5 @@ Finally, our testing suite can be found in the Testing folder.
 An algorithm can be run by simply running the run_sotp or run_pinkas files (with the right dependencies installed)
 
 All are made in Python3
+
+In the constants file, one can set the number of messages used and whether debug logs are printed.
